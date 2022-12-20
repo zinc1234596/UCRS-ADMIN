@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+    // alias
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
