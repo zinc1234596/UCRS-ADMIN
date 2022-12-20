@@ -22,6 +22,8 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    // 开启支持在TS开发的项目中导入.json后缀的模块
+    "resolveJsonModule": true
   }
 }

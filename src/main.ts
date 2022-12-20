@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
 import { AllExceptionsFilter } from '@/common/exceptions/base.exception.filter';
 import { HttpExceptionFilter } from '@/common/exceptions/http.exception.filter';
+import { generateDocument } from '@/doc';
 declare const module: any;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +18,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
   // 全局异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter());
+  // 创建swagger文档
+  generateDocument(app);
   // 端口
   await app.listen(1357); // 修改全局端口
 }
