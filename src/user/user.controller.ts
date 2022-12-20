@@ -1,13 +1,17 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { LoginUserDto } from '@/user/dto/login-user.dto';
+import { ApiOperation } from '@nestjs/swagger';
+import { Public } from '@/decorator/public.decorator';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @Public()
+  @Post('/login')
+  @ApiOperation({ summary: '登录' })
+  async login(@Body() dto: LoginUserDto) {
+    return this.userService.login(dto.username, dto.password);
   }
 }
