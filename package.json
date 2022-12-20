@@ -29,7 +29,10 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "run-script-webpack-plugin": "^0.1.1",
+    "mongoose": "^6.6.1",
+    "mysql2": "^2.3.3",
     "rxjs": "^7.2.0",
+    "typeorm": "^0.3.10",
     "webpack": "^5.74.0",
     "webpack-node-externals": "^3.0.0",
     "yaml": "^2.1.1"
