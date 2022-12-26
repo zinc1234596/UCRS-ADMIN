@@ -13,6 +13,12 @@ export class UserService {
     private readonly jwtService: JwtService,
   ) {}
 
+  /**
+   * login
+   * @param username
+   * @param password
+   * @description 判断username在db存不存在，如果存在则判断对应的password是否正确，若正确则返回token，否则抛出异常：账号密码错误
+   */
   async login(username: string, password: string) {
     const user = await this.findOneByUserName(username);
     if (user && user.password === password) {
@@ -24,17 +30,21 @@ export class UserService {
       });
     }
   }
+
   /**
    * 生成 token 与 刷新 token
    * @param payload
    * @returns
    */
   genToken(payload: { username: string }) {
-    const accessToken = `Bearer ${this.jwtService.sign(payload)}`;
-    const refreshToken = this.jwtService.sign(payload);
-    return { accessToken, refreshToken };
+    const accessToken = this.jwtService.sign(payload);
+    return { accessToken };
   }
 
+  /**
+   * findOneByUserName
+   * @param username
+   */
   async findOneByUserName(username: string) {
     return await this.userRepository.findOne({
       where: { username },
