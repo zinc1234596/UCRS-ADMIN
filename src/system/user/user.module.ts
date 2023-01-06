@@ -5,6 +5,8 @@ import { DatabaseModule } from '@/common/database/database.module';
 import { UserProviders } from '@/system/user/user.providers';
 import { JwtModule } from '@nestjs/jwt';
 import { getConfig } from '@/common/utils';
+import { RoleService } from '@/system/role/role.service';
+import { RoleProviders } from '@/system/role/role.providers';
 const { JWT } = getConfig();
 
 @Module({
@@ -18,7 +20,7 @@ const { JWT } = getConfig();
     }),
   ],
   controllers: [UserController],
-  providers: [...UserProviders, UserService],
+  providers: [...UserProviders, UserService, RoleService, ...RoleProviders],
   exports: [UserService],
 })
 export class UserModule {}

@@ -9,10 +9,19 @@ export class RoleService {
     @Inject('ROLE_REPOSITORY')
     private roleRepository: MongoRepository<Role>,
   ) {}
-  async newRole(createRoleDto: CreateRoleDto) {
+  async addRole(createRoleDto: CreateRoleDto) {
+    const { roleName, roleLevel } = createRoleDto;
+    const existRoleName = await this.roleRepository.findOne({
+      where: { roleName },
+    });
     const result = await this.roleRepository.save(createRoleDto);
     if (result) {
       return 'new role success!';
     }
+  }
+  async findRoleByLevel(roleLevel) {
+    return await this.roleRepository.findOne({
+      where: { roleLevel },
+    });
   }
 }

@@ -2,8 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
   ObjectIdColumn,
   OneToMany,
   UpdateDateColumn,
@@ -16,10 +14,10 @@ export class Role {
   id: number;
 
   @Column({ unique: true })
-  role_name: string;
+  roleName: string;
 
-  @Column()
-  level: number;
+  @Column({ unique: true })
+  roleLevel: number;
 
   @OneToMany((type) => User, (user) => user.role, { cascade: true })
   users: User[];

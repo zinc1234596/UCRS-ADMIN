@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from '@/system/user/dto/create-user.dto';
 import { LoginUserDto } from '@/system/user/dto/login-user.dto';
+import { RoleService } from '@/system/role/role.service';
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,7 @@ export class UserService {
     @Inject('USER_REPOSITORY')
     private userRepository: MongoRepository<User>,
     private readonly jwtService: JwtService,
+    private readonly roleService: RoleService,
   ) {}
 
   /**
@@ -47,11 +49,18 @@ export class UserService {
     } else {
       const salt = bcrypt.genSaltSync(10);
       const password = bcrypt.hashSync(createUserDto.password, salt);
-      const { username, role_level } = createUserDto;
+      const { username, roleLevel } = createUserDto;
+      const existRoleLevel = await this.roleService.findRoleByLevel(roleLevel);
+      if (!existRoleLevel) {
+        throw new BusinessException({
+          code: BUSINESS_ERROR_CODE.ROLE_LEVEL_NO_EXIST,
+          message: '身份不存在',
+        });
+      }
       const result = await this.userRepository.save({
         username,
         password,
-        role_level,
+        roleLevel,
       });
       if (result) return 'register success!';
     }
