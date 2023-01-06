@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import { getConfig } from '@/utils';
-import { AuthService } from '@/auth/auth.service';
+import { getConfig } from '@/common/utils';
+import { AuthService } from '@/system/auth/auth.service';
 
 // 从全局配置中获取 JWT 配置
 const { JWT } = getConfig();

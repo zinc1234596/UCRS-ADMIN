@@ -1,4 +1,4 @@
-import { User } from '@/user/entities/user.entity';
+import { User } from '@/system/user/entities/user.entity';
 
 export const UserProviders = [
   {

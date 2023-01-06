@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { MongoRepository } from 'typeorm';
-import { User } from '@/user/entities/user.entity';
+import { User } from '@/system/user/entities/user.entity';
 import { BusinessException } from '@/common/exceptions/business.exception';
 import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
 import { JwtService } from '@nestjs/jwt';

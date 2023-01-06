@@ -2,11 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   ObjectIdColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Role } from '@/system/role/entities/role.entity';
 
-@Entity()
+@Entity('user')
 export class User {
   @ObjectIdColumn({ type: 'bigint' })
   id: number;
@@ -17,17 +20,15 @@ export class User {
   @Column()
   password: string;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    name: 'create_date',
-    comment: '创建时间',
+  @ManyToOne((type) => Role, {
+    onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'role_id', referencedColumnName: 'id' })
+  role: Role;
+
+  @CreateDateColumn()
   createDate: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    name: 'update_date',
-    comment: '更新时间',
-  })
+  @UpdateDateColumn()
   updateDate: Date;
 }

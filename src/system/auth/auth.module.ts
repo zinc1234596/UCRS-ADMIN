@@ -1,8 +1,8 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { AuthStrategy } from '@/auth/auth.strategy';
+import { AuthStrategy } from '@/system/auth/auth.strategy';
 import { PassportModule } from '@nestjs/passport';
-import { UserModule } from '@/user/user.module';
-import { AuthService } from '@/auth/auth.service';
+import { UserModule } from '@/system/user/user.module';
+import { AuthService } from '@/system/auth/auth.service';
 
 @Module({
   imports: [
