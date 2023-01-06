@@ -5,6 +5,8 @@ import { BusinessException } from '@/common/exceptions/business.exception';
 import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
+import { CreateUserDto } from '@/system/user/dto/create-user.dto';
+import { LoginUserDto } from '@/system/user/dto/login-user.dto';
 
 @Injectable()
 export class UserService {
@@ -19,7 +21,8 @@ export class UserService {
    * @param username
    * @param password
    */
-  async login(username: string, password: string) {
+  async login(loginUserDto: LoginUserDto) {
+    const { username, password } = loginUserDto;
     const user = await this.findOneByUserName(username);
     if (user && (await bcrypt.compare(password, user.password))) {
       return this.getToken({ username });
@@ -34,8 +37,8 @@ export class UserService {
   /**
    * 注册
    */
-  async create(username: string, password: string) {
-    const user = await this.findOneByUserName(username);
+  async register(createUserDto: CreateUserDto) {
+    const user = await this.findOneByUserName(createUserDto.username);
     if (user) {
       throw new BusinessException({
         code: BUSINESS_ERROR_CODE.USER_INVALID,
@@ -43,8 +46,14 @@ export class UserService {
       });
     } else {
       const salt = bcrypt.genSaltSync(10);
-      password = bcrypt.hashSync(password, salt);
-      await this.userRepository.save({ username, password });
+      const password = bcrypt.hashSync(createUserDto.password, salt);
+      const { username, role_level } = createUserDto;
+      const result = await this.userRepository.save({
+        username,
+        password,
+        role_level,
+      });
+      if (result) return 'register success!';
     }
   }
 

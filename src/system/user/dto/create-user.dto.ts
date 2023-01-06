@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ description: '账号', example: 'user' })
@@ -11,4 +11,9 @@ export class CreateUserDto {
   @IsString({ message: 'password 类型错误' })
   @IsNotEmpty({ message: '密码不能为空' })
   password: string;
+
+  @ApiProperty({ description: '身份等级', example: '1' })
+  @IsNumber({}, { message: 'role_level类型错误' })
+  @IsNotEmpty({ message: '身份等级不能为空' })
+  role_level: number;
 }

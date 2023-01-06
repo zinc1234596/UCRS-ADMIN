@@ -13,14 +13,14 @@ export class UserController {
   @Post('/login')
   @Public()
   @ApiOperation({ summary: '登录' })
-  async login(@Body() dto: LoginUserDto) {
-    return this.userService.login(dto.username, dto.password);
+  async login(@Body() loginUserDto: LoginUserDto) {
+    return this.userService.login(loginUserDto);
   }
 
   @Post('/register')
-  @Public()
+  @ApiBearerAuth()
   @ApiOperation({ summary: '注册' })
-  async create(@Body() dto: CreateUserDto) {
-    return this.userService.create(dto.username, dto.password);
+  async register(@Body() createUserDto: CreateUserDto) {
+    return this.userService.register(createUserDto);
   }
 }
