@@ -50,13 +50,6 @@ export class UserService {
       const salt = bcrypt.genSaltSync(10);
       const password = bcrypt.hashSync(createUserDto.password, salt);
       const { username, roleLevel } = createUserDto;
-      const existRoleLevel = await this.roleService.findRoleByLevel(roleLevel);
-      if (!existRoleLevel) {
-        throw new BusinessException({
-          code: BUSINESS_ERROR_CODE.ROLE_LEVEL_NO_EXIST,
-          message: '身份不存在',
-        });
-      }
       const result = await this.userRepository.save({
         username,
         password,

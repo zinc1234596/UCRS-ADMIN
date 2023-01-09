@@ -6,6 +6,7 @@ import { AuthModule } from './system/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@/common/guards/auth.guard';
 import { RoleModule } from './system/role/role.module';
+import { MenuModule } from './system/menu/menu.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { RoleModule } from './system/role/role.module';
     UserModule,
     AuthModule,
     RoleModule,
+    MenuModule,
   ],
   providers: [
     {
