@@ -5,13 +5,14 @@ import {
   JoinColumn,
   ManyToOne,
   ObjectIdColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Role } from '@/system/role/entities/role.entity';
 
 @Entity('user')
 export class User {
-  @ObjectIdColumn({ type: 'bigint' })
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()

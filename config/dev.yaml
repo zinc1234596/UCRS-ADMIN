@@ -11,6 +11,13 @@ MONGODB_CONFIG:
   #  弃用警告：当前服务器发现和监视引擎已弃用，将在将来的版本中删除。
   #  要使用新的服务器发现和监视引擎，请将选项{useUnifiedTopology:true}传递给mongoClient构造函数。
   useUnifiedTopology: true
+MYSQL_CONFIG:
+  type: 'mysql'
+  host: 'localhost'
+  port: 3306
+  username: 'root'
+  password: 'aa23456788'
+  database: 'ucrs'
 JWT:
   secretKey: 'zANDwNQVFzx123lfG9myPxVWAkq4iXJEPhI'
   expiresTime : '1h'

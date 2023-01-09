@@ -38,9 +38,6 @@ export class Menu {
   @Column({ default: null })
   parentId: number;
 
-  @ManyToMany((type) => Role, (role) => role.menus)
-  roles: Role[];
-
   @CreateDateColumn()
   createTime: Date;
 

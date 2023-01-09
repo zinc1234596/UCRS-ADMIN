@@ -1,13 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateRoleDto } from '@/system/role/dto/create-role.dto';
-import { MongoRepository } from 'typeorm';
+import { MongoRepository, Repository } from 'typeorm';
 import { Role } from '@/system/role/entities/role.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class RoleService {
   constructor(
-    @Inject('ROLE_REPOSITORY')
-    private roleRepository: MongoRepository<Role>,
+    @InjectRepository(Role)
+    private roleRepository: Repository<Role>,
   ) {}
   async addRole(createRoleDto: CreateRoleDto) {
     const { roleName, roleLevel } = createRoleDto;

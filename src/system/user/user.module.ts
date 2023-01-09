@@ -1,26 +1,26 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { DatabaseModule } from '@/common/database/database.module';
-import { UserProviders } from '@/system/user/user.providers';
 import { JwtModule } from '@nestjs/jwt';
 import { getConfig } from '@/common/utils';
-import { RoleService } from '@/system/role/role.service';
-import { RoleProviders } from '@/system/role/role.providers';
+import { User } from '@/system/user/entities/user.entity';
 const { JWT } = getConfig();
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { RoleModule } from '@/system/role/role.module';
 
 @Module({
   imports: [
-    DatabaseModule,
+    TypeOrmModule.forFeature([User]),
     JwtModule.register({
       secret: JWT.secretKey,
       signOptions: {
         expiresIn: JWT.expiresTime,
       },
     }),
+    RoleModule,
   ],
   controllers: [UserController],
-  providers: [...UserProviders, UserService, RoleService, ...RoleProviders],
+  providers: [UserService],
   exports: [UserService],
 })
 export class UserModule {}

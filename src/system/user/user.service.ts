@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { MongoRepository } from 'typeorm';
+import { MongoRepository, Repository } from 'typeorm';
 import { User } from '@/system/user/entities/user.entity';
 import { BusinessException } from '@/common/exceptions/business.exception';
 import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
@@ -8,14 +8,15 @@ import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from '@/system/user/dto/create-user.dto';
 import { LoginUserDto } from '@/system/user/dto/login-user.dto';
 import { RoleService } from '@/system/role/role.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from '@/system/role/entities/role.entity';
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject('USER_REPOSITORY')
-    private userRepository: MongoRepository<User>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-    private readonly roleService: RoleService,
   ) {}
 
   /**
