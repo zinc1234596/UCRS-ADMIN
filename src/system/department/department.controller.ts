@@ -10,7 +10,7 @@ export class DepartmentController {
 
   @Post('addDepartment')
   @ApiBearerAuth()
-  async addRole(@Body() createDepartmentDto: CreateDepartmentDto) {
+  async addDepartment(@Body() createDepartmentDto: CreateDepartmentDto) {
     return this.departmentService.addDepartment(createDepartmentDto);
   }
 }

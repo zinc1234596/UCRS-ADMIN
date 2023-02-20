@@ -6,4 +6,5 @@ export const BUSINESS_ERROR_CODE = {
   USER_PASSWORD_INVALID: 200000, // 账号密码不正确
   USER_INVALID: 200001, // 账号已经存在
   ROLE_LEVEL_EXIST: 300001, // 身份已存在
+  DEPARTMENT_NAME_EXIST: 400001, //部门名称已存在
 };

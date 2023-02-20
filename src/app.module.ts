@@ -12,6 +12,7 @@ import { User } from '@/system/user/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Menu } from '@/system/menu/entities/menu.entity';
 import { DepartmentModule } from './system/department/department.module';
+import { Department } from '@/system/department/entities/department.entity';
 const { MYSQL_CONFIG } = getConfig();
 
 @Module({
@@ -23,7 +24,7 @@ const { MYSQL_CONFIG } = getConfig();
     }),
     TypeOrmModule.forRoot({
       ...MYSQL_CONFIG,
-      entities: [User, Role, Menu],
+      entities: [User, Role, Menu, Department],
       synchronize: true,
     }),
     UserModule,
