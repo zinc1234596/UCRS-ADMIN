@@ -8,7 +8,7 @@ export class CreateRoleDto {
   roleName: string;
 
   @ApiProperty({ description: '身份等级', example: 2 })
-  @IsNumber({}, { message: 'role_level类型错误' })
+  @IsNumber({}, { message: 'roleLevel类型错误' })
   @IsNotEmpty({ message: '身份等级不能为空' })
   roleLevel: number;
 }

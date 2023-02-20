@@ -13,7 +13,7 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty({ description: '身份等级', example: '1' })
-  @IsNumber({}, { message: 'role_level类型错误' })
+  @IsNumber({}, { message: 'roleId类型错误' })
   @IsNotEmpty({ message: '身份等级不能为空' })
-  roleLevel: number;
+  roleId: number;
 }

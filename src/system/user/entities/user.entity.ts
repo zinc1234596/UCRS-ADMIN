@@ -24,7 +24,7 @@ export class User {
   @ManyToOne((type) => Role, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'role_level', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'roleId', referencedColumnName: 'id' })
   role: Role;
 
   @CreateDateColumn()

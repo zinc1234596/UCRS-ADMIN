@@ -20,9 +20,9 @@ export class RoleService {
       return 'new role success!';
     }
   }
-  async findRoleByLevel(roleLevel) {
+  async findRoleByRoleId(roleId) {
     return await this.roleRepository.findOne({
-      where: { roleLevel },
+      where: { id: roleId },
     });
   }
 }

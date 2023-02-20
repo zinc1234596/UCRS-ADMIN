@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { MongoRepository, Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { User } from '@/system/user/entities/user.entity';
 import { BusinessException } from '@/common/exceptions/business.exception';
 import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
@@ -9,7 +9,6 @@ import { CreateUserDto } from '@/system/user/dto/create-user.dto';
 import { LoginUserDto } from '@/system/user/dto/login-user.dto';
 import { RoleService } from '@/system/role/role.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from '@/system/role/entities/role.entity';
 
 @Injectable()
 export class UserService {
@@ -17,7 +16,10 @@ export class UserService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-  ) {}
+    private readonly roleService: RoleService,
+  ) {
+    this.roleService = roleService;
+  }
 
   /**
    * login
@@ -50,11 +52,12 @@ export class UserService {
     } else {
       const salt = bcrypt.genSaltSync(10);
       const password = bcrypt.hashSync(createUserDto.password, salt);
-      const { username, roleLevel } = createUserDto;
+      const { username, roleId } = createUserDto;
+      const role = await this.roleService.findRoleByRoleId(roleId);
       const result = await this.userRepository.save({
         username,
         password,
-        roleLevel,
+        role,
       });
       if (result) return 'register success!';
     }
