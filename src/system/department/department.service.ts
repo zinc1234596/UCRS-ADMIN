@@ -6,6 +6,7 @@ import { CreateDepartmentDto } from '@/system/department/dto/create-department.d
 import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
 import { BusinessException } from '@/common/exceptions/business.exception';
 import { DeleteDepartmentDto } from '@/system/department/dto/delete-department.dto';
+import { UpdateDepartmentDto } from '@/system/department/dto/update-department.dto';
 
 @Injectable()
 export class DepartmentService {
@@ -36,13 +37,29 @@ export class DepartmentService {
     const existDepartment = await this.departmentRepository.findOne({
       where: { id },
     });
-    console.log(existDepartment);
     if (existDepartment) {
       const result = await this.departmentRepository.delete(
         deleteDepartmentDto,
       );
       if (result) {
         return 'delete department success';
+      }
+    }
+    throw new BusinessException({
+      code: BUSINESS_ERROR_CODE.DEPARTMENT_NO_EXIST,
+      message: '部门不存在',
+    });
+  }
+
+  async updateDepartment(updateDepartmentDto: UpdateDepartmentDto) {
+    const { id } = updateDepartmentDto;
+    const existDepartment = await this.departmentRepository.findOne({
+      where: { id },
+    });
+    if (existDepartment) {
+      const result = await this.departmentRepository.save(updateDepartmentDto);
+      if (result) {
+        return 'update department success';
       }
     }
     throw new BusinessException({
