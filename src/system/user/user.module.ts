@@ -7,6 +7,7 @@ import { User } from '@/system/user/entities/user.entity';
 const { JWT } = getConfig();
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoleModule } from '@/system/role/role.module';
+import { DepartmentModule } from '@/system/department/department.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RoleModule } from '@/system/role/role.module';
       },
     }),
     RoleModule,
+    DepartmentModule,
   ],
   controllers: [UserController],
   providers: [UserService],

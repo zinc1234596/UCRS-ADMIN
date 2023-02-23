@@ -34,9 +34,7 @@ export class DepartmentService {
 
   async deleteDepartment(deleteDepartmentDto: DeleteDepartmentDto) {
     const { id } = deleteDepartmentDto;
-    const existDepartment = await this.departmentRepository.findOne({
-      where: { id },
-    });
+    const existDepartment = this.findDepartmentById(id);
     if (existDepartment) {
       const result = await this.departmentRepository.delete(
         deleteDepartmentDto,
@@ -52,10 +50,8 @@ export class DepartmentService {
   }
 
   async updateDepartment(updateDepartmentDto: UpdateDepartmentDto) {
-    const { id } = updateDepartmentDto;
-    const existDepartment = await this.departmentRepository.findOne({
-      where: { id },
-    });
+    const { departmentId } = updateDepartmentDto;
+    const existDepartment = this.findDepartmentById(departmentId);
     if (existDepartment) {
       const result = await this.departmentRepository.save(updateDepartmentDto);
       if (result) {
@@ -65,6 +61,12 @@ export class DepartmentService {
     throw new BusinessException({
       code: BUSINESS_ERROR_CODE.DEPARTMENT_NO_EXIST,
       message: '部门不存在',
+    });
+  }
+
+  async findDepartmentById(id) {
+    return await this.departmentRepository.findOne({
+      where: { id },
     });
   }
 }

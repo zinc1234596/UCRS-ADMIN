@@ -9,6 +9,7 @@ import { CreateUserDto } from '@/system/user/dto/create-user.dto';
 import { LoginUserDto } from '@/system/user/dto/login-user.dto';
 import { RoleService } from '@/system/role/role.service';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DepartmentService } from '@/system/department/department.service';
 
 @Injectable()
 export class UserService {
@@ -17,6 +18,7 @@ export class UserService {
     private userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly roleService: RoleService,
+    private readonly departmentService: DepartmentService,
   ) {
     this.roleService = roleService;
   }
@@ -52,12 +54,16 @@ export class UserService {
     } else {
       const salt = bcrypt.genSaltSync(10);
       const password = bcrypt.hashSync(createUserDto.password, salt);
-      const { username, roleId } = createUserDto;
+      const { username, roleId, departmentId } = createUserDto;
       const role = await this.roleService.findRoleByRoleId(roleId);
+      const department = await this.departmentService.findDepartmentById(
+        departmentId,
+      );
       const result = await this.userRepository.save({
         username,
         password,
         role,
+        department,
       });
       if (result) return 'register success!';
     }

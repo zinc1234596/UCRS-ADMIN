@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Role } from '@/system/role/entities/role.entity';
+import { Department } from '@/system/department/entities/department.entity';
 
 @Entity('user')
 export class User {
@@ -26,6 +27,12 @@ export class User {
   })
   @JoinColumn({ name: 'roleId', referencedColumnName: 'id' })
   role: Role;
+
+  @ManyToOne((type) => Department, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'departmentId', referencedColumnName: 'id' })
+  department: Department;
 
   @CreateDateColumn()
   createDate: Date;
