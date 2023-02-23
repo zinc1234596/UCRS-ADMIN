@@ -10,6 +10,7 @@ import { LoginUserDto } from '@/system/user/dto/login-user.dto';
 import { RoleService } from '@/system/role/role.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DepartmentService } from '@/system/department/department.service';
+import { ResetPasswordDto } from '@/system/user/dto/reset-password.dto';
 
 @Injectable()
 export class UserService {
@@ -69,6 +70,23 @@ export class UserService {
     }
   }
 
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const { id } = resetPasswordDto;
+    const existUser = await this.findOneByUserId(id);
+    if (existUser) {
+      const defaultPassword = '123456';
+      const salt = bcrypt.genSaltSync(10);
+      const password = bcrypt.hashSync(defaultPassword, salt);
+      const result = await this.userRepository.update({ id }, { password });
+      if (result) return 'reset password success!';
+    } else {
+      throw new BusinessException({
+        code: BUSINESS_ERROR_CODE.USER_INVALID,
+        message: '用户无效或不存在',
+      });
+    }
+  }
+
   /**
    * 生成 token 与 刷新 token
    * @param payload
@@ -86,6 +104,12 @@ export class UserService {
   async findOneByUserName(username: string) {
     return await this.userRepository.findOne({
       where: { username },
+    });
+  }
+
+  async findOneByUserId(id: number) {
+    return await this.userRepository.findOne({
+      where: { id },
     });
   }
 }
