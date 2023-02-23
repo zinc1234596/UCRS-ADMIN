@@ -50,10 +50,13 @@ export class DepartmentService {
   }
 
   async updateDepartment(updateDepartmentDto: UpdateDepartmentDto) {
-    const { departmentId } = updateDepartmentDto;
-    const existDepartment = this.findDepartmentById(departmentId);
+    const { departmentId, departmentName, description } = updateDepartmentDto;
+    const existDepartment = await this.findDepartmentById(departmentId);
     if (existDepartment) {
-      const result = await this.departmentRepository.save(updateDepartmentDto);
+      const result = await this.departmentRepository.update(
+        { id: departmentId },
+        { departmentName, description },
+      );
       if (result) {
         return 'update department success';
       }
