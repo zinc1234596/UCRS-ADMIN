@@ -26,8 +26,6 @@ export class UserService {
 
   /**
    * login
-   * @param username
-   * @param password
    */
   async login(loginUserDto: LoginUserDto) {
     const { username, password } = loginUserDto;
