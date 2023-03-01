@@ -24,6 +24,7 @@ async function bootstrap() {
   // 创建swagger文档
   generateDocument(app);
   // 端口
+  app.enableCors();
   await app.listen(1357); // 修改全局端口
 }
 bootstrap();
