@@ -11,12 +11,33 @@ export class Menu {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  path: string;
+
   @Column({ unique: true })
-  departmentName: string;
+  name: string;
+
+  @Column({ default: null })
+  redirect: string;
+
+  @Column()
+  component: string;
+
+  @Column('simple-json')
+  meta: {
+    title: string;
+    icon: string;
+  };
+
+  @Column()
+  level: number;
+
+  @Column({ default: null })
+  parentId: number;
 
   @CreateDateColumn()
-  createDate: Date;
+  createTime: Date;
 
   @UpdateDateColumn()
-  updateDate: Date;
+  updateTime: Date;
 }

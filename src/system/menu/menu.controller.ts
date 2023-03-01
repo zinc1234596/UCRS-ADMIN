@@ -1,17 +1,15 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { MenuService } from './menu.service';
-import { CreateMenuDto } from './dto/create-menu.dto';
-import { UpdateMenuDto } from './dto/update-menu.dto';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 @Controller('menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
+
+  // @Post('/createMenu')
+  // @ApiBearerAuth()
+  // @ApiOperation({ summary: 'createMenu' })
+  // createMenu(@Body() createMenuArrayDto: CreateMenuArrayDto) {
+  //   return this.menuService.createMenu(createMenuArrayDto);
+  // }
 }

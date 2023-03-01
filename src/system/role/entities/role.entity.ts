@@ -26,6 +26,9 @@ export class Role {
   @OneToMany((type) => User, (user) => user.role, { cascade: true })
   users: User[];
 
+  @ManyToMany(() => Menu)
+  @JoinTable()
+  menus: Menu[];
   // @ManyToMany((type) => Menu, (menu) => menu.roles)
   // @JoinTable({
   //   name: 'role_menu',

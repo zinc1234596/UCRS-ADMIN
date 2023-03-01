@@ -17,7 +17,7 @@ export class CreateUserDto {
   @IsNotEmpty({ message: '角色id不能为空' })
   roleId: number;
 
-  @ApiProperty({ description: '部门id', example: '1' })
+  @ApiProperty({ description: '部门id', example: 1 })
   @IsNumber({}, { message: 'departmentId类型错误' })
   @IsNotEmpty({ message: '部门id不能为空' })
   departmentId: number;
