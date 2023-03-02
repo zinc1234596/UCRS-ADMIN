@@ -64,7 +64,7 @@ export class UserService {
         role,
         department,
       });
-      if (result) return 'register success!';
+      if (result) return;
     }
   }
 

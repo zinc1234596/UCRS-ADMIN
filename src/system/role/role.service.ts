@@ -25,4 +25,18 @@ export class RoleService {
       where: { id: roleId },
     });
   }
+
+  async getRoleMenus(id: number) {
+    const res = await this.roleRepository.findOne({
+      where: { id },
+      relations: {
+        menus: true,
+      },
+    });
+    if (res) {
+      return res.menus;
+    } else {
+      // throw
+    }
+  }
 }
