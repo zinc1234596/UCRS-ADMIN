@@ -10,41 +10,41 @@ import { USER_ROLE_LEVEL } from '@/common/constants/user.role.constants';
 import { Department } from '@/system/department/entities/department.entity';
 import { FetchDepartmentDto } from '@/system/department/dto/fetch-department.dto';
 
-@ApiTags('department')
-@Controller('department')
+@ApiTags('部门管理')
+@Controller('departments')
 export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}
 
-  @Post('addDepartment')
+  @Post('create')
   @UseGuards(RoleAuthGuard)
   @RoleAuth(USER_ROLE_LEVEL.DIRECTOR)
   @ApiBearerAuth()
   @ApiOperation({ summary: '添加部门' })
-  async addDepartment(@Body() createDepartmentDto: CreateDepartmentDto) {
-    return this.departmentService.addDepartment(createDepartmentDto);
+  async createDepartment(@Body() createDepartmentDto: CreateDepartmentDto) {
+    return this.departmentService.createDepartment(createDepartmentDto);
   }
 
-  @Post('deleteDepartment')
+  @Post('delete')
   @ApiBearerAuth()
   @ApiOperation({ summary: '删除部门' })
   async deleteDepartment(@Body() deleteDepartmentDto: DeleteDepartmentDto) {
     return this.departmentService.deleteDepartment(deleteDepartmentDto);
   }
 
-  @Post('updateDepartment')
+  @Post('update')
   @ApiBearerAuth()
   @ApiOperation({ summary: '更改部门' })
   async updateDepartment(@Body() updateDepartmentDto: UpdateDepartmentDto) {
     return this.departmentService.updateDepartment(updateDepartmentDto);
   }
 
-  @Get()
+  @Get('fetch')
   @ApiBearerAuth()
   @ApiOperation({ summary: '分页查询部门' })
-  async getDepartmentsWithPagination(
+  async fetchDepartmentsWithPagination(
     @Query() query: FetchDepartmentDto,
   ): Promise<{ departments: Department[]; total: number }> {
-    return this.departmentService.findAllDepartmentsWithPagination(
+    return this.departmentService.fetchDepartmentsWithPagination(
       query.page,
       query.limit,
     );
