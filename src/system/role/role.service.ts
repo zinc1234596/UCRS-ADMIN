@@ -3,6 +3,9 @@ import { CreateRoleDto } from '@/system/role/dto/create-role.dto';
 import { MongoRepository, Repository } from 'typeorm';
 import { Role } from '@/system/role/entities/role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BusinessException } from '@/common/exceptions/business.exception';
+import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
+import { Menu } from '@/system/menu/entities/menu.entity';
 
 @Injectable()
 export class RoleService {
@@ -26,7 +29,7 @@ export class RoleService {
     });
   }
 
-  async getRoleMenus(id: number) {
+  async getRoleMenus(id: number): Promise<Menu[]> {
     const res = await this.roleRepository.findOne({
       where: { id },
       relations: {
@@ -36,7 +39,10 @@ export class RoleService {
     if (res) {
       return res.menus;
     } else {
-      // throw
+      throw new BusinessException({
+        code: BUSINESS_ERROR_CODE.ROLE_INVALID,
+        message: '角色无效',
+      });
     }
   }
 }

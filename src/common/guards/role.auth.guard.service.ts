@@ -6,11 +6,10 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { RoleService } from '@/system/role/role.service';
 
 @Injectable()
 export class RoleAuthGuard implements CanActivate {
-  constructor(private reflector: Reflector, private roleService: RoleService) {}
+  constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext) {
     const requiredRoleLevel = this.reflector.get<number>(
@@ -20,9 +19,12 @@ export class RoleAuthGuard implements CanActivate {
     if (!requiredRoleLevel) {
       return true;
     }
-    const user = context.switchToHttp().getRequest().user;
-    const role = await this.roleService.findRoleByRoleId(user.roleId);
-    if (role.roleLevel >= requiredRoleLevel) {
+
+    const request = context.switchToHttp().getRequest().user;
+    console.log(
+      `roleLevel:${request.role.roleLevel} limitLevel:${requiredRoleLevel}`,
+    );
+    if (request.role.roleLevel >= requiredRoleLevel) {
       return true;
     } else {
       throw new HttpException('角色权限不足', HttpStatus.FORBIDDEN);

@@ -14,8 +14,8 @@ export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}
 
   @Post('addDepartment')
-  @RoleAuth(USER_ROLE_LEVEL.MANAGER)
   @UseGuards(RoleAuthGuard)
+  @RoleAuth(USER_ROLE_LEVEL.DIRECTOR)
   @ApiBearerAuth()
   async addDepartment(@Body() createDepartmentDto: CreateDepartmentDto) {
     return this.departmentService.addDepartment(createDepartmentDto);
