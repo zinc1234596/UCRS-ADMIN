@@ -102,6 +102,10 @@ export class UserService {
   async findOneByUserName(username: string) {
     return await this.userRepository.findOne({
       where: { username },
+      relations: {
+        role: true,
+        department: true,
+      },
     });
   }
 
