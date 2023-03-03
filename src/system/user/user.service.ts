@@ -11,6 +11,7 @@ import { RoleService } from '@/system/role/role.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DepartmentService } from '@/system/department/department.service';
 import { ResetPasswordDto } from '@/system/user/dto/reset-password.dto';
+import { UpdateUserDto } from '@/system/user/dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -66,6 +67,59 @@ export class UserService {
       });
       if (result) return;
     }
+  }
+
+  async deleteUser(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new BusinessException({
+        code: BUSINESS_ERROR_CODE.USER_INVALID,
+        message: '用户无效或不存在',
+      });
+    }
+    await this.userRepository.remove(user);
+    return 'delete user success';
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const { username, roleId, departmentId } = updateUserDto;
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['role', 'department'],
+    });
+    if (!user) {
+      throw new BusinessException({
+        code: BUSINESS_ERROR_CODE.USER_INVALID,
+        message: '用户不存在',
+      });
+    }
+    if (username) {
+      user.username = username;
+    }
+    if (roleId) {
+      const role = await this.roleService.findRoleByRoleId(roleId);
+      if (!role) {
+        throw new BusinessException({
+          code: BUSINESS_ERROR_CODE.ROLE_INVALID,
+          message: '角色不存在',
+        });
+      }
+      user.role = role;
+    }
+    if (departmentId) {
+      const department = await this.departmentService.findDepartmentById(
+        departmentId,
+      );
+      if (!department) {
+        throw new BusinessException({
+          code: BUSINESS_ERROR_CODE.DEPARTMENT_NO_EXIST,
+          message: '部门不存在',
+        });
+      }
+      user.department = department;
+    }
+    await this.userRepository.save(user);
+    return 'update user success';
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
