@@ -16,8 +16,10 @@ export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}
 
   @Post('create')
-  @UseGuards(RoleAuthGuard)
-  @RoleAuth(USER_ROLE_LEVEL.DIRECTOR)
+  @RoleAuth({
+    roleLevel: USER_ROLE_LEVEL.DIRECTOR,
+    guards: [RoleAuthGuard],
+  })
   @ApiBearerAuth()
   @ApiOperation({ summary: '添加部门' })
   async createDepartment(@Body() createDepartmentDto: CreateDepartmentDto) {
