@@ -26,10 +26,7 @@ export class UserService {
     this.roleService = roleService;
   }
 
-  /**
-   * login
-   */
-  async login(loginUserDto: LoginUserDto) {
+  async login(loginUserDto: LoginUserDto): Promise<{ accessToken: string }> {
     const { username, password } = loginUserDto;
     const user = await this.findOneByUserName(username);
     if (user && (await bcrypt.compare(password, user.password))) {
@@ -42,10 +39,7 @@ export class UserService {
     }
   }
 
-  /**
-   * 注册
-   */
-  async register(createUserDto: CreateUserDto) {
+  async register(createUserDto: CreateUserDto): Promise<void> {
     const user = await this.findOneByUserName(createUserDto.username);
     if (user) {
       throw new BusinessException({
@@ -66,11 +60,12 @@ export class UserService {
         role,
         department,
       });
+      console.log(result);
       if (result) return;
     }
   }
 
-  async deleteUser(id: number) {
+  async deleteUser(id: number): Promise<void> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new BusinessException({
@@ -79,10 +74,10 @@ export class UserService {
       });
     }
     await this.userRepository.remove(user);
-    return 'delete user success';
+    return;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<void> {
     const { username, roleId, departmentId } = updateUserDto;
     const user = await this.userRepository.findOne({
       where: { id },
@@ -120,7 +115,7 @@ export class UserService {
       user.department = department;
     }
     await this.userRepository.save(user);
-    return 'update user success';
+    return;
   }
 
   async fetchUsers(
@@ -143,7 +138,7 @@ export class UserService {
     return { data, total };
   }
 
-  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
     const { id } = resetPasswordDto;
     const existUser = await this.findOneByUserId(id);
     if (existUser) {
@@ -151,7 +146,7 @@ export class UserService {
       const salt = bcrypt.genSaltSync(10);
       const password = bcrypt.hashSync(defaultPassword, salt);
       const result = await this.userRepository.update({ id }, { password });
-      if (result) return 'reset password success!';
+      if (result) return;
     } else {
       throw new BusinessException({
         code: BUSINESS_ERROR_CODE.USER_INVALID,
@@ -160,20 +155,11 @@ export class UserService {
     }
   }
 
-  /**
-   * 生成 token 与 刷新 token
-   * @param payload
-   * @returns
-   */
-  getToken(payload: { username: string }) {
+  getToken(payload: { username: string }): { accessToken: string } {
     const accessToken = this.jwtService.sign(payload);
     return { accessToken };
   }
 
-  /**
-   * findOneByUserName
-   * @param username
-   */
   async findOneByUserName(username: string) {
     return await this.userRepository.findOne({
       where: { username },

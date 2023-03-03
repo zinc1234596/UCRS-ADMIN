@@ -29,28 +29,28 @@ export class UserController {
     return this.userService.login(loginUserDto);
   }
 
-  @Post('/register')
+  @Post('/create')
   @ApiBearerAuth()
   @ApiOperation({ summary: '增加用户/注册' })
-  async register(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto) {
     return this.userService.register(createUserDto);
   }
 
-  @Delete(':id')
+  @Delete('/delete/:id')
   @ApiBearerAuth()
   @ApiOperation({ summary: '删除用户' })
   async delete(@Param('id') id: number) {
     return this.userService.deleteUser(id);
   }
 
-  @Put('/:id')
+  @Put('/update/:id')
   @ApiBearerAuth()
   @ApiOperation({ summary: '更新用户信息' })
   async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+    return this.userService.updateUser(id, updateUserDto);
   }
 
-  @Get('/')
+  @Get('/fetch')
   @ApiBearerAuth()
   @ApiOperation({ summary: '分页查询用户' })
   async fetchUsers(@Query() fetchUserDto: FetchUserDto) {
