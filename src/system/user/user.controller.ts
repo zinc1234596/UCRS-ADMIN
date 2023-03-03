@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Delete, Param, Put } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Delete,
+  Param,
+  Put,
+  Get,
+  Query,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { LoginUserDto } from '@/system/user/dto/login-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -6,6 +15,7 @@ import { Public } from '@/common/decorator/public.decorator';
 import { CreateUserDto } from '@/system/user/dto/create-user.dto';
 import { ResetPasswordDto } from '@/system/user/dto/reset-password.dto';
 import { UpdateUserDto } from '@/system/user/dto/update-user.dto';
+import { FetchUserDto } from '@/system/user/dto/fetch-user.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -38,6 +48,13 @@ export class UserController {
   @ApiOperation({ summary: '更新用户信息' })
   async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
+  }
+
+  @Get('/')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '分页查询用户' })
+  async fetchUsers(@Query() fetchUserDto: FetchUserDto) {
+    return this.userService.fetchUsers(fetchUserDto);
   }
 
   @Post('/resetPassword')

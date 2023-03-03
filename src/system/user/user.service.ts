@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { User } from '@/system/user/entities/user.entity';
 import { BusinessException } from '@/common/exceptions/business.exception';
 import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
@@ -12,6 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DepartmentService } from '@/system/department/department.service';
 import { ResetPasswordDto } from '@/system/user/dto/reset-password.dto';
 import { UpdateUserDto } from '@/system/user/dto/update-user.dto';
+import { FetchUserDto } from '@/system/user/dto/fetch-user.dto';
 
 @Injectable()
 export class UserService {
@@ -120,6 +121,26 @@ export class UserService {
     }
     await this.userRepository.save(user);
     return 'update user success';
+  }
+
+  async fetchUsers(
+    fetchUserDto: FetchUserDto,
+  ): Promise<{ data: User[]; total: number }> {
+    const { page, limit, searchType, searchValue } = fetchUserDto;
+    let where = {};
+    if (searchType && searchValue) {
+      if (searchType === 'id') {
+        where = { [searchType]: searchValue };
+      } else {
+        where = { [searchType]: Like(`%${searchValue}%`) };
+      }
+    }
+    const [data, total] = await this.userRepository.findAndCount({
+      where,
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    return { data, total };
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
