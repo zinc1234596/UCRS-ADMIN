@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException } from '@/common/exceptions/business.exception';
 import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
 import { Menu } from '@/system/menu/entities/menu.entity';
+import { toTree } from '@/common/utils/toTree';
 
 @Injectable()
 export class RoleService {
@@ -37,7 +38,7 @@ export class RoleService {
       },
     });
     if (res) {
-      return res.menus;
+      return toTree(res.menus);
     } else {
       throw new BusinessException({
         code: BUSINESS_ERROR_CODE.ROLE_INVALID,
