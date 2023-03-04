@@ -23,7 +23,6 @@ export class CreateUserDto {
   @ApiProperty({ description: '角色id', example: '1' })
   @IsNumber({}, { message: 'roleId类型错误' })
   @IsNotEmpty({ message: '角色id不能为空' })
-  @Max(4, { message: '权限不足' })
   roleId: number;
 
   @ApiProperty({ description: '部门id', example: 1 })

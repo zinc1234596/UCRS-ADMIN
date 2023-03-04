@@ -51,6 +51,12 @@ export class UserService {
       const password = bcrypt.hashSync(createUserDto.password, salt);
       const { username, roleId, departmentId } = createUserDto;
       const role = await this.roleService.findRoleByRoleId(roleId);
+      if (role.roleLevel >= 10) {
+        throw new BusinessException({
+          code: BUSINESS_ERROR_CODE.ACCESS_FORBIDDEN,
+          message: '禁止访问',
+        });
+      }
       const department = await this.departmentService.findDepartmentById(
         departmentId,
       );
@@ -66,11 +72,17 @@ export class UserService {
   }
 
   async deleteUser(id: number): Promise<void> {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.findOneByUserId(id);
     if (!user) {
       throw new BusinessException({
         code: BUSINESS_ERROR_CODE.USER_INVALID,
         message: '用户无效或不存在',
+      });
+    }
+    if (user.role.roleLevel >= 10) {
+      throw new BusinessException({
+        code: BUSINESS_ERROR_CODE.ACCESS_FORBIDDEN,
+        message: '禁止访问',
       });
     }
     await this.userRepository.remove(user);
@@ -79,10 +91,7 @@ export class UserService {
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<void> {
     const { username, roleId, departmentId } = updateUserDto;
-    const user = await this.userRepository.findOne({
-      where: { id },
-      relations: ['role', 'department'],
-    });
+    const user = await this.findOneByUserId(id);
     if (!user) {
       throw new BusinessException({
         code: BUSINESS_ERROR_CODE.USER_INVALID,
@@ -151,6 +160,12 @@ export class UserService {
     const { id } = resetPasswordDto;
     const existUser = await this.findOneByUserId(id);
     if (existUser) {
+      if (existUser.role.roleLevel >= 10) {
+        throw new BusinessException({
+          code: BUSINESS_ERROR_CODE.ACCESS_FORBIDDEN,
+          message: '禁止访问',
+        });
+      }
       const defaultPassword = '123456';
       const salt = bcrypt.genSaltSync(10);
       const password = bcrypt.hashSync(defaultPassword, salt);
@@ -182,6 +197,7 @@ export class UserService {
   async findOneByUserId(id: number) {
     return await this.userRepository.findOne({
       where: { id },
+      relations: ['role', 'department'],
     });
   }
 }
