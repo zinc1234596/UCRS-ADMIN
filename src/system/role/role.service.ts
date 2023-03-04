@@ -46,4 +46,7 @@ export class RoleService {
       });
     }
   }
+  async getRoleList() {
+    return await this.roleRepository.find();
+  }
 }
