@@ -54,6 +54,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({ summary: '分页查询用户' })
   async fetchUsers(@Query() fetchUserDto: FetchUserDto) {
+    console.log(fetchUserDto);
     return this.userService.fetchUsers(fetchUserDto);
   }
 

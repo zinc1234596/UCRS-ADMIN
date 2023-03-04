@@ -120,7 +120,7 @@ export class UserService {
 
   async fetchUsers(
     fetchUserDto: FetchUserDto,
-  ): Promise<{ data: User[]; total: number }> {
+  ): Promise<{ usersList: User[]; total: number }> {
     const { page, limit, searchType, searchValue } = fetchUserDto;
     let where = {};
     if (searchType && searchValue) {
@@ -130,12 +130,21 @@ export class UserService {
         where = { [searchType]: Like(`%${searchValue}%`) };
       }
     }
-    const [data, total] = await this.userRepository.findAndCount({
+    const [usersList, total] = await this.userRepository.findAndCount({
       where,
+      select: [
+        'id',
+        'username',
+        'role',
+        'department',
+        'createDate',
+        'updateDate',
+      ],
+      relations: ['role', 'department'],
       skip: (page - 1) * limit,
       take: limit,
     });
-    return { data, total };
+    return { usersList, total };
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {

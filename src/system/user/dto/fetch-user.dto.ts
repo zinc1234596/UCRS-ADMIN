@@ -11,10 +11,10 @@ export class FetchUserDto {
   @ApiPropertyOptional({ description: '搜索条件', example: 'id' })
   @IsString()
   @IsOptional()
-  searchType?: string;
+  searchType: string;
 
   @ApiPropertyOptional({ description: '搜索内容', example: '3' })
   @IsString()
   @IsOptional()
-  searchValue?: string;
+  searchValue: string;
 }
