@@ -91,4 +91,8 @@ export class DepartmentService {
       total,
     };
   }
+
+  async getDepartmentList() {
+    return await this.departmentRepository.find();
+  }
 }

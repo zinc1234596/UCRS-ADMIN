@@ -11,7 +11,7 @@ import { Department } from '@/system/department/entities/department.entity';
 import { FetchDepartmentDto } from '@/system/department/dto/fetch-department.dto';
 
 @ApiTags('部门管理')
-@Controller('departments')
+@Controller('department')
 export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}
 
@@ -50,5 +50,12 @@ export class DepartmentController {
       query.page,
       query.limit,
     );
+  }
+
+  @Get('get')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '查询部门' })
+  async getDepartmentList() {
+    return this.departmentService.getDepartmentList();
   }
 }
