@@ -7,15 +7,18 @@ import {
   Put,
   Get,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { LoginUserDto } from '@/system/user/dto/login-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Public } from '@/common/decorator/public.decorator';
+import { Public, RoleAuth } from '@/common/decorator/public.decorator';
 import { CreateUserDto } from '@/system/user/dto/create-user.dto';
 import { ResetPasswordDto } from '@/system/user/dto/reset-password.dto';
 import { UpdateUserDto } from '@/system/user/dto/update-user.dto';
 import { FetchUserDto } from '@/system/user/dto/fetch-user.dto';
+import { USER_ROLE_LEVEL } from '@/common/constants/user.role.constants';
+import { RoleAuthGuard } from '@/common/guards/role.auth.guard.service';
 
 @ApiTags('user')
 @Controller('user')
@@ -30,6 +33,8 @@ export class UserController {
   }
 
   @Post('/create')
+  @RoleAuth(USER_ROLE_LEVEL.MANAGER)
+  @UseGuards(RoleAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: '增加用户/注册' })
   async create(@Body() createUserDto: CreateUserDto) {
@@ -37,6 +42,8 @@ export class UserController {
   }
 
   @Delete('/delete/:id')
+  @RoleAuth(USER_ROLE_LEVEL.MANAGER)
+  @UseGuards(RoleAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: '删除用户' })
   async delete(@Param('id') id: number) {
@@ -44,6 +51,8 @@ export class UserController {
   }
 
   @Put('/update/:id')
+  @RoleAuth(USER_ROLE_LEVEL.MANAGER)
+  @UseGuards(RoleAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: '更新用户信息' })
   async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
@@ -51,6 +60,8 @@ export class UserController {
   }
 
   @Get('/fetch')
+  @RoleAuth(USER_ROLE_LEVEL.ASSISTANT)
+  @UseGuards(RoleAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: '分页查询用户' })
   async fetchUsers(@Query() fetchUserDto: FetchUserDto) {
@@ -59,6 +70,8 @@ export class UserController {
   }
 
   @Post('/resetPassword')
+  @RoleAuth(USER_ROLE_LEVEL.MANAGER)
+  @UseGuards(RoleAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: '重置密码' })
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
