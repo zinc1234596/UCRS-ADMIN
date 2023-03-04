@@ -22,10 +22,10 @@ export class MenuController {
   //   return this.menuService.createMenu(createMenuArrayDto);
   // }
   @Get('getRoleMenus')
-  @RoleAuth({
-    roleLevel: USER_ROLE_LEVEL.ASSISTANT,
-    guards: [RoleAuthGuard],
-  })
+  // @RoleAuth({
+  //   roleLevel: USER_ROLE_LEVEL.ASSISTANT,
+  //   guards: [RoleAuthGuard],
+  // })
   @ApiBearerAuth()
   @ApiOperation({ summary: '获取角色菜单' })
   getRoleMenus(@Query('roleId') roleId: number): Promise<Menu[]> {
