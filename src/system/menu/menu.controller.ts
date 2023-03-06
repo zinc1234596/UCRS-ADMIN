@@ -1,4 +1,12 @@
-import { Controller, Get, Query, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+  Request,
+  Post,
+  Body,
+} from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RoleService } from '@/system/role/role.service';
@@ -38,4 +46,18 @@ export class MenuController {
   getOwnMenu(@Request() req) {
     return this.roleService.getRoleMenus(req.user.role.id);
   }
+
+  @Get('getRoleMenusWithStatusForEdit')
+  @ApiBearerAuth()
+  async getRoleMenusWithStatusForEdit(@Query('roleId') roleId: number) {
+    console.log(roleId);
+    const list = await this.roleService.getRoleMenus(roleId);
+    return this.menuService.getRoleMenusWithStatusForEdit(list);
+  }
+
+  // @Post('saveRoleMenus')
+  // saveTheRoleMenus(@Body() body: any) {
+  //   console.log(body);
+  //   // return this.roleService.saveRoleMenus(body);
+  // }
 }

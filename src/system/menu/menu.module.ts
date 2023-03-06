@@ -4,6 +4,7 @@ import { MenuController } from './menu.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Menu } from '@/system/menu/entities/menu.entity';
 import { RoleModule } from '@/system/role/role.module';
+import { RoleService } from '@/system/role/role.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Menu]), RoleModule],

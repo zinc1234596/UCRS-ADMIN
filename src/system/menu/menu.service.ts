@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Menu } from '@/system/menu/entities/menu.entity';
@@ -6,12 +6,14 @@ import { Repository } from 'typeorm';
 import { flatten } from '@/common/utils';
 import { BusinessException } from '@/common/exceptions/business.exception';
 import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
+import { toTree } from '@/common/utils/toTree';
+import { Role } from '@/system/role/entities/role.entity';
 
 @Injectable()
 export class MenuService {
   constructor(
     @InjectRepository(Menu)
-    private menuRepository: Repository<Menu>,
+    private menuRepository: Repository<Menu>, // private roleRepository: Repository<Role>,
   ) {}
   // async createMenu(createMenuArrayDto: CreateMenuArrayDto) {
   // if (
@@ -54,5 +56,59 @@ export class MenuService {
   // //   const newMenu = this.menuRepository.create(item);
   // //   this.menuRepository.save(newMenu);
   // // });
+  // }
+  async getRoleMenusWithStatusForEdit(list) {
+    const flattenAllMenus = await this.getFlattenAllMenus().then((res) => res);
+    flattenAllMenus.forEach((item) => {
+      item['status'] = false;
+      flatten(list).forEach((sitem) => {
+        if (item.id == sitem.id) {
+          item['status'] = true;
+        }
+      });
+    });
+    const res = toTree(flattenAllMenus);
+    return res;
+  }
+
+  async getFlattenAllMenus() {
+    return await this.menuRepository.find({
+      select: [
+        'id',
+        'path',
+        'name',
+        'redirect',
+        'component',
+        'meta',
+        'level',
+        'parentId',
+      ],
+    });
+  }
+
+  // async saveRoleMenus(data) {
+  //   const name = data.role_name;
+  //   const id = data.role_id;
+  //   console.log(data);
+  //   const list = [];
+  //   // if (id === 2) throw new HttpException('Forbidden！', HttpStatus.FORBIDDEN);
+  //   flatten(data.list).forEach((item) => {
+  //     if (item.status) list.push(item);
+  //   });
+  //   const role = await this.roleRepository.findOne({
+  //     where: { id },
+  //     relations: {
+  //       menus: true,
+  //     },
+  //   });
+  //   if (role) {
+  //     role.updateTime = new Date();
+  //     role.menus = list;
+  //     role.name = name;
+  //     const res = await this.roleRepository.save(role);
+  //     if (res) return { statusCode: 200, message: 'success' };
+  //   } else {
+  //     throw new HttpException('fail', HttpStatus.BAD_REQUEST);
+  //   }
   // }
 }
