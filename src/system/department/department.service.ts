@@ -28,17 +28,14 @@ export class DepartmentService {
     }
     const result = await this.departmentRepository.save(createDepartmentDto);
     if (result) {
-      return 'add department success';
+      return;
     }
   }
 
-  async deleteDepartment(deleteDepartmentDto: DeleteDepartmentDto) {
-    const { id } = deleteDepartmentDto;
+  async deleteDepartment(id: number) {
     const existDepartment = await this.findDepartmentById(id);
     if (existDepartment) {
-      const result = await this.departmentRepository.delete(
-        deleteDepartmentDto,
-      );
+      const result = await this.departmentRepository.remove(existDepartment);
       if (result) {
         return 'delete department success';
       }
@@ -49,8 +46,9 @@ export class DepartmentService {
     });
   }
 
-  async updateDepartment(updateDepartmentDto: UpdateDepartmentDto) {
-    const { departmentId, departmentName, description } = updateDepartmentDto;
+  async updateDepartment(id, updateDepartmentDto: UpdateDepartmentDto) {
+    const { departmentName, description } = updateDepartmentDto;
+    const departmentId = id;
     const existDepartment = await this.findDepartmentById(departmentId);
     if (existDepartment) {
       try {

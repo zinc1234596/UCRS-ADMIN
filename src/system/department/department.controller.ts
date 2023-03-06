@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { DepartmentService } from './department.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateDepartmentDto } from '@/system/department/dto/create-department.dto';
@@ -24,18 +34,21 @@ export class DepartmentController {
     return this.departmentService.createDepartment(createDepartmentDto);
   }
 
-  @Post('delete')
+  @Delete('/delete/:id')
   @ApiBearerAuth()
   @ApiOperation({ summary: '删除部门' })
-  async deleteDepartment(@Body() deleteDepartmentDto: DeleteDepartmentDto) {
-    return this.departmentService.deleteDepartment(deleteDepartmentDto);
+  async deleteDepartment(@Param('id') id: number) {
+    return this.departmentService.deleteDepartment(id);
   }
 
-  @Post('update')
+  @Put('/update/:id')
   @ApiBearerAuth()
   @ApiOperation({ summary: '更改部门' })
-  async updateDepartment(@Body() updateDepartmentDto: UpdateDepartmentDto) {
-    return this.departmentService.updateDepartment(updateDepartmentDto);
+  async updateDepartment(
+    @Param('id') id: number,
+    @Body() updateDepartmentDto: UpdateDepartmentDto,
+  ) {
+    return this.departmentService.updateDepartment(id, updateDepartmentDto);
   }
 
   @Get('fetch')
