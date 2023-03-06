@@ -17,9 +17,7 @@ export class DepartmentService {
 
   async createDepartment(createDepartmentDto: CreateDepartmentDto) {
     const { departmentName } = createDepartmentDto;
-    const existDepartment = await this.departmentRepository.findOne({
-      where: { departmentName },
-    });
+    const existDepartment = await this.findDepartmentByName(departmentName);
     if (existDepartment) {
       throw new BusinessException({
         code: BUSINESS_ERROR_CODE.DEPARTMENT_EXIST,
@@ -37,7 +35,7 @@ export class DepartmentService {
     if (existDepartment) {
       const result = await this.departmentRepository.remove(existDepartment);
       if (result) {
-        return 'delete department success';
+        return;
       }
     }
     throw new BusinessException({
@@ -56,12 +54,10 @@ export class DepartmentService {
           { id: departmentId },
           { departmentName, description },
         );
-        console.log(result);
-        if (result && result.affected > 0) {
-          return 'update department success';
+        if (result) {
+          return;
         }
       } catch (error) {
-        console.log(error);
         throw new BusinessException({
           code: BUSINESS_ERROR_CODE.DEPARTMENT_UPDATE_FAILED,
           message: '部门更新失败',
@@ -73,6 +69,12 @@ export class DepartmentService {
   async findDepartmentById(id) {
     return await this.departmentRepository.findOne({
       where: { id },
+    });
+  }
+
+  async findDepartmentByName(departmentName) {
+    return await this.departmentRepository.findOne({
+      where: { departmentName },
     });
   }
 
