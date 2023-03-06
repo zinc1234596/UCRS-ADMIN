@@ -1,13 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Allow,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Max,
-  Validate,
-  ValidateIf,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ description: '账号', example: 'user' })

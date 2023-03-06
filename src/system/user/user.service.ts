@@ -13,6 +13,8 @@ import { DepartmentService } from '@/system/department/department.service';
 import { ResetPasswordDto } from '@/system/user/dto/reset-password.dto';
 import { UpdateUserDto } from '@/system/user/dto/update-user.dto';
 import { FetchUserDto } from '@/system/user/dto/fetch-user.dto';
+import { FORBIDDEN_ROLE_LEVEL } from '@/common/constants/user.role.constants';
+import { DEFAULT_PASSWORD } from '@/common/constants';
 
 @Injectable()
 export class UserService {
@@ -51,7 +53,7 @@ export class UserService {
       const password = bcrypt.hashSync(createUserDto.password, salt);
       const { username, roleId, departmentId } = createUserDto;
       const role = await this.roleService.findRoleByRoleId(roleId);
-      if (role.roleLevel >= 10) {
+      if (role.roleLevel >= FORBIDDEN_ROLE_LEVEL) {
         throw new BusinessException({
           code: BUSINESS_ERROR_CODE.ACCESS_FORBIDDEN,
           message: '禁止访问',
@@ -66,7 +68,6 @@ export class UserService {
         role,
         department,
       });
-      console.log(result);
       if (result) return;
     }
   }
@@ -79,7 +80,7 @@ export class UserService {
         message: '用户无效或不存在',
       });
     }
-    if (user.role.roleLevel >= 10) {
+    if (user.role.roleLevel >= FORBIDDEN_ROLE_LEVEL) {
       throw new BusinessException({
         code: BUSINESS_ERROR_CODE.ACCESS_FORBIDDEN,
         message: '禁止访问',
@@ -160,13 +161,13 @@ export class UserService {
     const { id } = resetPasswordDto;
     const existUser = await this.findOneByUserId(id);
     if (existUser) {
-      if (existUser.role.roleLevel >= 10) {
+      if (existUser.role.roleLevel >= FORBIDDEN_ROLE_LEVEL) {
         throw new BusinessException({
           code: BUSINESS_ERROR_CODE.ACCESS_FORBIDDEN,
           message: '禁止访问',
         });
       }
-      const defaultPassword = '123456';
+      const defaultPassword = DEFAULT_PASSWORD;
       const salt = bcrypt.genSaltSync(10);
       const password = bcrypt.hashSync(defaultPassword, salt);
       const result = await this.userRepository.update({ id }, { password });

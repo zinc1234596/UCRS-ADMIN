@@ -6,3 +6,5 @@ export const USER_ROLE_LEVEL = {
   ADMINISTRATOR: 10, //管理员
   SUPER_ADMINISTRATOR: 100, //超级管理员
 };
+
+export const FORBIDDEN_ROLE_LEVEL = 10;
