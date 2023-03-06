@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateRoleDto } from '@/system/role/dto/create-role.dto';
-import { MongoRepository, Repository } from 'typeorm';
+import { LessThan, MongoRepository, MoreThan, Repository } from 'typeorm';
 import { Role } from '@/system/role/entities/role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException } from '@/common/exceptions/business.exception';
@@ -46,7 +46,10 @@ export class RoleService {
       });
     }
   }
-  async getRoleList() {
-    return await this.roleRepository.find();
+  async getRoleList(level: number) {
+    const res = await this.roleRepository.findBy({
+      roleLevel: LessThan(level),
+    });
+    return res;
   }
 }

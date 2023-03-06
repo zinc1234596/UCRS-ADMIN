@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateRoleDto } from '@/system/role/dto/create-role.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -16,7 +16,7 @@ export class RoleController {
 
   @Get('get')
   @ApiBearerAuth()
-  async getRoleList() {
-    return this.roleService.getRoleList();
+  async getRoleList(@Request() req) {
+    return this.roleService.getRoleList(req.user.role.roleLevel);
   }
 }
