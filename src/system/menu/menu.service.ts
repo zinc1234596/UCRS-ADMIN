@@ -85,30 +85,4 @@ export class MenuService {
       ],
     });
   }
-
-  // async saveRoleMenus(data) {
-  //   const name = data.role_name;
-  //   const id = data.role_id;
-  //   console.log(data);
-  //   const list = [];
-  //   // if (id === 2) throw new HttpException('Forbidden！', HttpStatus.FORBIDDEN);
-  //   flatten(data.list).forEach((item) => {
-  //     if (item.status) list.push(item);
-  //   });
-  //   const role = await this.roleRepository.findOne({
-  //     where: { id },
-  //     relations: {
-  //       menus: true,
-  //     },
-  //   });
-  //   if (role) {
-  //     role.updateTime = new Date();
-  //     role.menus = list;
-  //     role.name = name;
-  //     const res = await this.roleRepository.save(role);
-  //     if (res) return { statusCode: 200, message: 'success' };
-  //   } else {
-  //     throw new HttpException('fail', HttpStatus.BAD_REQUEST);
-  //   }
-  // }
 }

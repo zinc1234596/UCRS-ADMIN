@@ -50,14 +50,13 @@ export class MenuController {
   @Get('getRoleMenusWithStatusForEdit')
   @ApiBearerAuth()
   async getRoleMenusWithStatusForEdit(@Query('roleId') roleId: number) {
-    console.log(roleId);
     const list = await this.roleService.getRoleMenus(roleId);
     return this.menuService.getRoleMenusWithStatusForEdit(list);
   }
 
-  // @Post('saveRoleMenus')
-  // saveTheRoleMenus(@Body() body: any) {
-  //   console.log(body);
-  //   // return this.roleService.saveRoleMenus(body);
-  // }
+  @Post('saveRoleMenus')
+  saveTheRoleMenus(@Body() body: any) {
+    console.log(body);
+    return this.roleService.saveRoleMenus(body);
+  }
 }
