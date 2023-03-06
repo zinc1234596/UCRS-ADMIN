@@ -60,7 +60,6 @@ export class RoleService {
     const name = data.role_name;
     const id = data.role_id;
     const list = [];
-    // if (id === 2) throw new HttpException('Forbidden！', HttpStatus.FORBIDDEN);
     flatten(data.list).forEach((item) => {
       if (item.status) list.push(item);
     });
