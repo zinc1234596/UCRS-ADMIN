@@ -22,19 +22,19 @@ export class DepartmentController {
 
   @Post('create')
   @RoleAuth(USER_ROLE_LEVEL.ADMINISTRATOR)
-  async createDepartment(@Body() createDepartmentDto: CreateDepartmentDto) {
+  async create(@Body() createDepartmentDto: CreateDepartmentDto) {
     return this.departmentService.createDepartment(createDepartmentDto);
   }
 
-  @Delete('/delete/:id')
+  @Delete('delete/:id')
   @RoleAuth(USER_ROLE_LEVEL.ADMINISTRATOR)
-  async deleteDepartment(@Param('id') id: number) {
+  async delete(@Param('id') id: number) {
     return this.departmentService.deleteDepartment(id);
   }
 
-  @Put('/update/:id')
+  @Put('update/:id')
   @RoleAuth(USER_ROLE_LEVEL.ADMINISTRATOR)
-  async updateDepartment(
+  async update(
     @Param('id') id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
   ) {
@@ -43,7 +43,7 @@ export class DepartmentController {
 
   @Get('get')
   @RoleAuth(USER_ROLE_LEVEL.ADMINISTRATOR)
-  async getDepartmentList() {
+  async get() {
     return this.departmentService.getDepartmentList();
   }
 }

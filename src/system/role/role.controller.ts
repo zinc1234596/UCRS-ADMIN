@@ -5,18 +5,18 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('role')
 @Controller('role')
+@ApiBearerAuth()
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post('addRole')
-  @ApiBearerAuth()
   async addRole(@Body() createRoleDto: CreateRoleDto) {
     return this.roleService.addRole(createRoleDto);
   }
 
   @Get('get')
-  @ApiBearerAuth()
   async getRoleList(@Request() req) {
-    return this.roleService.getRoleList(req.user.role.roleLevel);
+    const { roleLevel } = req.user.role;
+    return this.roleService.getRoleList(roleLevel);
   }
 }
