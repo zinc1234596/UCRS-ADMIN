@@ -76,20 +76,6 @@ export class DepartmentService {
     });
   }
 
-  async fetchDepartmentsWithPagination(
-    page = 1,
-    limit = 10,
-  ): Promise<{ departments: Department[]; total: number }> {
-    const [departments, total] = await this.departmentRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
-    return {
-      departments,
-      total,
-    };
-  }
-
   async getDepartmentList() {
     return await this.departmentRepository.find();
   }
