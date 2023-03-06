@@ -44,6 +44,6 @@ export class DepartmentController {
   @Get('get')
   @RoleAuth(USER_ROLE_LEVEL.ADMINISTRATOR)
   async get() {
-    return this.departmentService.getDepartmentList();
+    return this.departmentService.getDepartments();
   }
 }

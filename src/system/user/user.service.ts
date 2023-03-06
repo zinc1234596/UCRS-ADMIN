@@ -41,7 +41,7 @@ export class UserService {
     }
   }
 
-  async register(createUserDto: CreateUserDto): Promise<void> {
+  async createUser(createUserDto: CreateUserDto): Promise<void> {
     const user = await this.findOneByUserName(createUserDto.username);
     if (user) {
       throw new BusinessException({

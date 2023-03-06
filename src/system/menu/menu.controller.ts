@@ -47,13 +47,6 @@ export class MenuController {
     return this.roleService.getRoleMenus(req.user.role.id);
   }
 
-  @Get('getRoleMenusWithStatusForEdit')
-  @ApiBearerAuth()
-  async getRoleMenusWithStatusForEdit(@Query('roleId') roleId: number) {
-    const list = await this.roleService.getRoleMenus(roleId);
-    return this.menuService.getRoleMenusWithStatusForEdit(list);
-  }
-
   @Post('saveRoleMenus')
   saveTheRoleMenus(@Body() body: any) {
     console.log(body);

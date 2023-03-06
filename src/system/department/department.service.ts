@@ -77,7 +77,7 @@ export class DepartmentService {
     });
   }
 
-  async getDepartmentList() {
+  async getDepartments() {
     return await this.departmentRepository.find();
   }
 }

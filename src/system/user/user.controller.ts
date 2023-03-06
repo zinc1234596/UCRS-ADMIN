@@ -33,7 +33,7 @@ export class UserController {
   @Post('create')
   @RoleAuth(USER_ROLE_LEVEL.MANAGER)
   async create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.register(createUserDto);
+    return this.userService.createUser(createUserDto);
   }
 
   @Delete('delete/:id')
