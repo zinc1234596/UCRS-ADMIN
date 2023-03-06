@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { CreateDepartmentDto } from '@/system/department/dto/create-department.dto';
 import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
 import { BusinessException } from '@/common/exceptions/business.exception';
-import { DeleteDepartmentDto } from '@/system/department/dto/delete-department.dto';
 import { UpdateDepartmentDto } from '@/system/department/dto/update-department.dto';
 
 @Injectable()

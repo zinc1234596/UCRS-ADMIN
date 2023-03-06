@@ -15,6 +15,7 @@ export class RoleAuthGuard implements CanActivate {
       'roleAuth',
       context.getHandler(),
     );
+    console.log(requiredRoleLevel);
     if (!requiredRoleLevel) {
       return true;
     }

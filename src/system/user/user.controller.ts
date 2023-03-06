@@ -22,6 +22,7 @@ import { RoleAuthGuard } from '@/common/guards/role.auth.guard.service';
 
 @ApiTags('user')
 @Controller('user')
+@ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -33,40 +34,30 @@ export class UserController {
 
   @Post('/create')
   @RoleAuth(USER_ROLE_LEVEL.MANAGER)
-  @UseGuards(RoleAuthGuard)
-  @ApiBearerAuth()
   async create(@Body() createUserDto: CreateUserDto) {
     return this.userService.register(createUserDto);
   }
 
   @Delete('/delete/:id')
   @RoleAuth(USER_ROLE_LEVEL.MANAGER)
-  @UseGuards(RoleAuthGuard)
-  @ApiBearerAuth()
   async delete(@Param('id') id: number) {
     return this.userService.deleteUser(id);
   }
 
   @Put('/update/:id')
   @RoleAuth(USER_ROLE_LEVEL.MANAGER)
-  @UseGuards(RoleAuthGuard)
-  @ApiBearerAuth()
   async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(id, updateUserDto);
   }
 
   @Get('/fetch')
   @RoleAuth(USER_ROLE_LEVEL.ASSISTANT)
-  @UseGuards(RoleAuthGuard)
-  @ApiBearerAuth()
   async fetchUsers(@Query() fetchUserDto: FetchUserDto) {
     return this.userService.fetchUsers(fetchUserDto);
   }
 
   @Post('/resetPassword')
   @RoleAuth(USER_ROLE_LEVEL.MANAGER)
-  @UseGuards(RoleAuthGuard)
-  @ApiBearerAuth()
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     return this.userService.resetPassword(resetPasswordDto);
   }
