@@ -7,6 +7,7 @@ import {
   Put,
   Get,
   Query,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { LoginUserDto } from '@/system/user/dto/login-user.dto';
@@ -34,8 +35,9 @@ export class UserController {
   @Post('create')
   @RoleAuth(USER_ROLE_LEVEL.MANAGER)
   @ApiOperation({ summary: '新增用户-总监及以上权限' })
-  async create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+  async create(@Request() req, @Body() createUserDto: CreateUserDto) {
+    const userDepartmentId = req.user.department.id;
+    return this.userService.createUser(userDepartmentId, createUserDto);
   }
 
   @Delete('delete/:id')
@@ -56,8 +58,9 @@ export class UserController {
   @ApiOperation({
     summary: '获取用户列表-带分页/搜索',
   })
-  async fetch(@Query() fetchUserDto: FetchUserDto) {
-    return this.userService.fetchUsers(fetchUserDto);
+  async fetch(@Request() req, @Query() fetchUserDto: FetchUserDto) {
+    const userDepartmentId = req.user.department.id;
+    return this.userService.fetchUsers(userDepartmentId, fetchUserDto);
   }
 
   @Post('resetPassword')

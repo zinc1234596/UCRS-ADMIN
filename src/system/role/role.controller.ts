@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Put,
   Query,
@@ -13,6 +14,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MenuService } from '@/system/menu/menu.service';
 import { RoleAuth } from '@/common/decorator/public.decorator';
 import { USER_ROLE_LEVEL } from '@/common/constants/user.role.constants';
+import { UpdateRoleDto } from '@/system/role/dto/update-role.dto';
 
 @ApiTags('role')
 @Controller('role')
@@ -38,10 +40,13 @@ export class RoleController {
     return res;
   }
 
-  @Post('saveRoleMenus')
+  @Post('updateRoleMenus')
   @RoleAuth(USER_ROLE_LEVEL.ADMINISTRATOR)
   @ApiOperation({ summary: '更新角色菜单-管理员及以上权限' })
-  saveTheRoleMenus(@Body() body: any) {
-    return this.roleService.saveRoleMenus(body);
+  updateRoleMenus(
+    @Param('id') id: number,
+    @Body() updateRoleDto: UpdateRoleDto,
+  ) {
+    return this.roleService.updateRoleMenus(id, updateRoleDto);
   }
 }

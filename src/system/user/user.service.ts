@@ -14,7 +14,10 @@ import { ResetPasswordDto } from '@/system/user/dto/reset-password.dto';
 import { UpdateUserDto } from '@/system/user/dto/update-user.dto';
 import { FetchUserDto } from '@/system/user/dto/fetch-user.dto';
 import { FORBIDDEN_ROLE_LEVEL } from '@/common/constants/user.role.constants';
-import { DEFAULT_PASSWORD } from '@/common/constants';
+import {
+  ALL_DEPARTMENT_PERMISSION_ID,
+  DEFAULT_PASSWORD,
+} from '@/common/constants';
 
 @Injectable()
 export class UserService {
@@ -41,7 +44,10 @@ export class UserService {
     }
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<void> {
+  async createUser(
+    userDepartmentId: number,
+    createUserDto: CreateUserDto,
+  ): Promise<void> {
     const user = await this.findOneByUserName(createUserDto.username);
     if (user) {
       throw new BusinessException({
@@ -53,15 +59,19 @@ export class UserService {
       const password = bcrypt.hashSync(createUserDto.password, salt);
       const { username, roleId, departmentId } = createUserDto;
       const role = await this.roleService.findRoleByRoleId(roleId);
-      if (role.roleLevel >= FORBIDDEN_ROLE_LEVEL) {
+      const department = await this.departmentService.findDepartmentById(
+        departmentId,
+      );
+      if (
+        userDepartmentId !== ALL_DEPARTMENT_PERMISSION_ID &&
+        department.id !== userDepartmentId &&
+        role.roleLevel >= FORBIDDEN_ROLE_LEVEL
+      ) {
         throw new BusinessException({
           code: BUSINESS_ERROR_CODE.ACCESS_FORBIDDEN,
           message: '禁止访问',
         });
       }
-      const department = await this.departmentService.findDepartmentById(
-        departmentId,
-      );
       const result = await this.userRepository.save({
         username,
         password,
@@ -129,6 +139,7 @@ export class UserService {
   }
 
   async fetchUsers(
+    departmentId: number,
     fetchUserDto: FetchUserDto,
   ): Promise<{ usersList: User[]; total: number }> {
     const { page, limit, searchType, searchValue } = fetchUserDto;
@@ -140,6 +151,10 @@ export class UserService {
         where = { [searchType]: Like(`%${searchValue}%`) };
       }
     }
+    if (departmentId !== ALL_DEPARTMENT_PERMISSION_ID) {
+      where = { ...where, department: { id: departmentId } };
+    }
+    console.log(where);
     const [usersList, total] = await this.userRepository.findAndCount({
       where,
       select: [

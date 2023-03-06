@@ -1,1 +1,3 @@
 export const DEFAULT_PASSWORD = '123456';
+
+export const ALL_DEPARTMENT_PERMISSION_ID = 7;
