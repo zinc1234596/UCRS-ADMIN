@@ -18,6 +18,7 @@ import {
   ALL_DEPARTMENT_PERMISSION_ID,
   DEFAULT_PASSWORD,
 } from '@/common/constants';
+import { UpdateMyPasswordDto } from '@/system/user/dto/update-my-password.dto';
 
 @Injectable()
 export class UserService {
@@ -154,7 +155,6 @@ export class UserService {
     if (departmentId !== ALL_DEPARTMENT_PERMISSION_ID) {
       where = { ...where, department: { id: departmentId } };
     }
-    console.log(where);
     const [usersList, total] = await this.userRepository.findAndCount({
       where,
       select: [
@@ -193,6 +193,23 @@ export class UserService {
         message: '用户无效或不存在',
       });
     }
+  }
+
+  async updateMyPassword(
+    id: number,
+    password: string,
+    updateMyPasswordDto: UpdateMyPasswordDto,
+  ) {
+    const { oldPassword, newPassword } = updateMyPasswordDto;
+    const passwordMatches = await bcrypt.compare(oldPassword, password);
+    if (!passwordMatches) {
+      throw new BusinessException({
+        code: BUSINESS_ERROR_CODE.USER_INVALID,
+        message: '旧密码错误',
+      });
+    }
+    const newHashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.userRepository.update(id, { password: newHashedPassword });
   }
 
   getToken(payload: { username: string }): { accessToken: string } {

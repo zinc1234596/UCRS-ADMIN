@@ -18,6 +18,7 @@ import { ResetPasswordDto } from '@/system/user/dto/reset-password.dto';
 import { UpdateUserDto } from '@/system/user/dto/update-user.dto';
 import { FetchUserDto } from '@/system/user/dto/fetch-user.dto';
 import { USER_ROLE_LEVEL } from '@/common/constants/user.role.constants';
+import { UpdateMyPasswordDto } from '@/system/user/dto/update-my-password.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -68,5 +69,17 @@ export class UserController {
   @ApiOperation({ summary: '重置用户密码-总监及以上权限' })
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     return this.userService.resetPassword(resetPasswordDto);
+  }
+
+  @Post('updateMyPassword')
+  @ApiOperation({
+    summary: '更新用户(个人)密码',
+  })
+  async updateMyPassword(
+    @Request() req,
+    @Body() updateMyPasswordDto: UpdateMyPasswordDto,
+  ) {
+    const { id, password } = req.user;
+    return this.userService.updateMyPassword(id, password, updateMyPasswordDto);
   }
 }
