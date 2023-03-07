@@ -32,11 +32,18 @@ export class UserService {
     this.roleService = roleService;
   }
 
-  async login(loginUserDto: LoginUserDto): Promise<{ accessToken: string }> {
+  async login(loginUserDto: LoginUserDto): Promise<{
+    roleName: string;
+    departmentName: string;
+    accessToken: string;
+  }> {
     const { username, password } = loginUserDto;
     const user = await this.findOneByUserName(username);
     if (user && (await bcrypt.compare(password, user.password))) {
-      return this.getToken({ username });
+      const roleName = user.role.roleName;
+      const departmentName = user.department.departmentName;
+      const accessToken = this.getToken({ username });
+      return { roleName, departmentName, ...accessToken };
     } else {
       throw new BusinessException({
         code: BUSINESS_ERROR_CODE.USER_PASSWORD_INVALID,
