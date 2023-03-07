@@ -40,7 +40,7 @@ export class RoleController {
     return res;
   }
 
-  @Post('updateRoleMenus')
+  @Put('updateRoleMenus/:id')
   @RoleAuth(USER_ROLE_LEVEL.ADMINISTRATOR)
   @ApiOperation({ summary: '更新角色菜单-管理员及以上权限' })
   updateRoleMenus(
