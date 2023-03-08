@@ -39,6 +39,5 @@ swagger文档
 RBAC动态菜单已经完成，环境基础配置也搭建好了，差几个边缘模块可以快速完成，主要考虑后续扩展性、还有往大学社团纳新开源系统方向，做完全可配置化，还有Vue3+Element Plus的代码质量，因为是一两天一把梭哈的，所以有待完善，包括ui设计也是潦草，不过架构环境是配好的。
 
 ## 部分截图：
--
 ![](https://secure2.wostatic.cn/static/3VRga3gCPNtDb9rJyL6gFv/image.png?auth_key=1678265403-rHpFShW72q9FB5UT79QMbH-0-b458e9d356804180beccadea6e6911d3)
 
