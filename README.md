@@ -1,5 +1,6 @@
 # UCRS-ADMIN
 
+ps:技术小白 在校生写着玩的 欢迎指导👏
 ## 介绍
 
 基于Nestjs + TypeScript + Typeorm + Mysql + Vue3 + Element Plus 编写的一款简单高效的前后端分离的大学社团纳新系统（企业中后台管理系统RBAC权限管理 可细粒化到动态权限菜单、按钮等）
